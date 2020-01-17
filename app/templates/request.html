@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{http://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="form-group">
+        <form action="" method="get">
+            <input type="text" name="keyword">
+            <button type="submit">검색</button>
+        </form>
+    </div>
+    {% for key,value in book_list.items %}
+        <div>
+            <div> {{ key }}</div>
+
+            <form action="{% url 'books:book-request-save' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" value="{{ value }}" name="url">신청하기 </button>
+            </form>
+
+{#            <button type="submit" name="request" value="{{ value }}">신청</button>#}
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+
