@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for book in books %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{ book.image.url }}" alt="" class="card-img-top" width="200px" height="200px">
+            <a  href="{% url 'books:detail' book_pk=book.pk %}" class="card-title">{{ book.title }}</a>
+            {% if book.rental.user == request.user %}
+                <div class="">
+                    <a type="submit" href="{% url 'rental:return' book_pk=book.pk %}" class="bth btn-danger btn-lg btn-block">반납</a>
+                </div>
+            {% elif book.rental.user and book.rental.user is not request.user %}
+                <div>
+                    {#                    <a type="submit" href="{% url 'rental:return' book_pk=book.pk %}" class="bth btn-primary p-3">대출중</a>#}
+
+                    <p>대출중</p>
+
+                </div>
+                <br>
+            {% else %}
+                <div class="text-center">
+                    <a type="submit" href="{% url 'rental:rental' book_pk=book.pk %}" class="bth btn-primary btn-lg btn-block">대출</a>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <br>
+    <div class="list-group-item-action">
+        <h2 class=list-group-item-action">빌린 책 목록</h2>
+        {% for rental in request.user.rental_set.all %}
+            <ul class="list-group">
+            <li class="list-group-item">{{ rental.book.title }}</li>
+                <li class="list-group-item">{{ rental.end_date }}</li>
+            <hr>
+            </ul>
+        {% endfor %}
+
+    </div>
+{% endblock %}
